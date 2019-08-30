@@ -19,16 +19,16 @@ after_success:
   - docker push tmciesco/multi-nginx
   - docker push tmciesco/multi-server
   - docker push tmciesco/multi-worker
-# deploy:
-#   provider: elasticbeanstalk
-#   region: "us-east-1"
-#   app: "docker-react"
-#   env: "DockerReact-env"
-#   bucket_name: "elasticbeanstalk-us-east-1-906007410246"
-#   bucket_path: "docker-react"
-#   on:
-#     branch: master
-#   access_key_id:
-#     secure: "$AWS_ACCESS_KEY"
-#   secret_access_key:
-#     secure: "$AWS_SECRET_KEY"
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "multi-docker"
+  env: "MultiDocker-env"
+  bucket_name: "elasticbeanstalk-us-east-1-906007410246"
+  bucket_path: "multi-docker"
+  on:
+    branch: master
+  access_key_id:
+    secure: "$AWS_ACCESS_KEY"
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
