@@ -1,0 +1,34 @@
+sudo: required
+language: generic
+services:
+  - docker
+
+before_install:
+  - docker build -t tmciesco/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true tmciesco/react-test npm run test -- --coverage
+
+after_success:
+  - docker build -t tmciesco/multi-client ./client
+  - docker build -t tmciesco/multi-nginx ./nginx
+  - docker build -t tmciesco/multi-server ./server
+  - docker build -t tmciesco/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push tmciesco/multi-client
+  - docker push tmciesco/multi-nginx
+  - docker push tmciesco/multi-server
+  - docker push tmciesco/multi-worker
+# deploy:
+#   provider: elasticbeanstalk
+#   region: "us-east-1"
+#   app: "docker-react"
+#   env: "DockerReact-env"
+#   bucket_name: "elasticbeanstalk-us-east-1-906007410246"
+#   bucket_path: "docker-react"
+#   on:
+#     branch: master
+#   access_key_id:
+#     secure: "$AWS_ACCESS_KEY"
+#   secret_access_key:
+#     secure: "$AWS_SECRET_KEY"
